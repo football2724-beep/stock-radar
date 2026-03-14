@@ -4,12 +4,13 @@ AI 股票觀察站 - 後端伺服器
 執行方式：python3 server.py
 """
 
+import os
 import json
 import urllib.request
 import urllib.error
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-PORT = 8888
+PORT = int(os.environ.get("PORT", 8888))
 
 class StockHandler(BaseHTTPRequestHandler):
 
@@ -75,24 +76,44 @@ class StockHandler(BaseHTTPRequestHandler):
             result = data["chart"]["result"][0]
             meta = result["meta"]
 
+            # Get volume from indicators (more reliable than meta)
+            quote_ind = result.get("indicators", {}).get("quote", [{}])[0]
+            volumes = quote_ind.get("volume", [])
+            volume = next((v for v in reversed(volumes) if v), 0) or meta.get("regularMarketVolume", 0)
+
             price     = meta.get("regularMarketPrice", 0)
             prev      = meta.get("previousClose") or meta.get("chartPreviousClose", price)
             change    = round(price - prev, 2)
             changePct = round((change / prev) * 100, 2) if prev else 0
+            market_cap = meta.get("marketCap", 0)
+
+            # If missing market cap, try v7 API
+            if not market_cap:
+                try:
+                    url2 = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={ticker}"
+                    req2 = urllib.request.Request(url2, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req2, timeout=5) as resp2:
+                        data2 = json.loads(resp2.read())
+                    q = data2.get("quoteResponse", {}).get("result", [{}])[0]
+                    market_cap = q.get("marketCap", 0)
+                    if not volume:
+                        volume = q.get("regularMarketVolume", 0)
+                except:
+                    pass
 
             self.send_json({
-                "symbol":     meta.get("symbol", ticker),
-                "name":       meta.get("longName") or meta.get("shortName", ticker),
-                "price":      round(price, 2),
-                "change":     change,
-                "changePct":  changePct,
-                "high":       round(meta.get("regularMarketDayHigh", price), 2),
-                "low":        round(meta.get("regularMarketDayLow", price), 2),
-                "volume":     meta.get("regularMarketVolume", 0),
-                "hi52":       round(meta.get("fiftyTwoWeekHigh", price), 2),
-                "lo52":       round(meta.get("fiftyTwoWeekLow", price), 2),
-                "marketCap":  meta.get("marketCap", 0),
-                "currency":   meta.get("currency", "USD"),
+                "symbol":    meta.get("symbol", ticker),
+                "name":      meta.get("longName") or meta.get("shortName", ticker),
+                "price":     round(price, 2),
+                "change":    change,
+                "changePct": changePct,
+                "high":      round(meta.get("regularMarketDayHigh", price), 2),
+                "low":       round(meta.get("regularMarketDayLow", price), 2),
+                "volume":    volume,
+                "hi52":      round(meta.get("fiftyTwoWeekHigh", price), 2),
+                "lo52":      round(meta.get("fiftyTwoWeekLow", price), 2),
+                "marketCap": market_cap,
+                "currency":  meta.get("currency", "USD"),
             })
 
         except Exception as e:
@@ -164,7 +185,7 @@ class StockHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("localhost", PORT), StockHandler)
+    server = HTTPServer(("0.0.0.0", PORT), StockHandler)
     print("=" * 45)
     print("  🚀 AI 股票觀察站後端已啟動！")
     print(f"  📡 伺服器位址：http://localhost:{PORT}")
