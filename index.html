@@ -1106,9 +1106,8 @@ ${profile.outlook}` : '';
     `【買賣時機建議】\n${buyText} 請務必設好停損點控制風險。`,
     `【主要風險因素】\n${risks}`,
     `【AI 綜合評分】\n${Math.round(score/10)}/10 — ${score>65?'基本面與技術面相對健康，長期持有具吸引力':score<40?'短期偏弱，謹慎操作':'中性，持續追蹤變化'}。`,
-    `【情緒分數：${score}】`
+    `【情緒分數：${score}】`,
   ].filter(s => s).join('\n\n');
-}
 }
 
 function renderDeepAnalysis(text, stock, techHTML = '') {
