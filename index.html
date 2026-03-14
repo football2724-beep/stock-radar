@@ -474,7 +474,7 @@ body::before{content:'';position:fixed;inset:0;
 // ─────────────────────────────────────────────
 // CONFIG & STATE
 // ─────────────────────────────────────────────
-const API_BASE = 'http://localhost:8888';
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:8888' : 'https://stock-radar-dqgc.onrender.com';
 let apiKey = '';
 let priceChart = null;
 let currentTicker = '';
@@ -873,34 +873,210 @@ ${techSummary}
 }
 
 const STOCK_PROFILES = {
-  AAPL: { desc: 'Apple 是全球市值最大的科技公司，以 iPhone、Mac、iPad 及 App Store 生態系聞名。近年積極布局 Apple Silicon 晶片、Vision Pro 混合實境裝置及 Apple Intelligence AI 功能，服務業務（訂閱、App Store）佔營收比重持續提升。', risks: ['iPhone 銷量佔營收超過50%，換機週期拉長是主要隱憂', '中國市場競爭加劇，華為等本土品牌搶佔份額', 'AI 功能落後 Google/Microsoft，需加速追趕'] },
-  TSLA: { desc: 'Tesla 是全球電動車龍頭，同時經營儲能（Megapack）與自動駕駛（FSD）業務。近年面臨中國比亞迪等競爭者大幅降價壓力，毛利率明顯收縮。馬斯克同時執掌多家公司，管理分心為市場關注焦點。', risks: ['電動車市場競爭白熱化，價格戰壓縮毛利率', '自動駕駛 FSD 商業化時程不確定', '馬斯克個人品牌風險，可能影響品牌形象'] },
-  NVDA: { desc: 'NVIDIA 是全球 AI 晶片霸主，旗下 H100/H200/Blackwell GPU 是訓練大型語言模型的首選。資料中心業務爆發式成長，已超越遊戲成為最大營收來源。在 AI 基礎設施建設浪潮中處於核心地位。', risks: ['高度依賴台積電先進製程，地緣政治風險不可忽視', '美國對中國出口管制持續收緊，中國市場受限', 'AMD、Intel 及客戶自研晶片構成潛在競爭威脅'] },
-  MSFT: { desc: 'Microsoft 是全球最大企業軟體公司，旗下 Azure 雲端平台排名全球第二。與 OpenAI 深度合作，將 GPT-4 整合進 Microsoft 365 Copilot、Bing 及 Azure 服務，是目前 AI 商業化最成熟的科技巨頭之一。', risks: ['Azure 成長率需維持高位才能支撐高估值', '企業 IT 預算削減可能拖累授權業務', 'Activision 收購整合風險及遊戲業務表現'] },
-  AMZN: { desc: 'Amazon 以電商起家，目前最大利潤來源是 AWS 雲端服務。廣告業務快速成長，成為第三大收入支柱。物流網路持續優化帶動零售部門獲利改善，AI 方面推出 Bedrock 平台與 Claude 合作。', risks: ['AWS 面臨 Azure 與 GCP 激烈競爭，市占率壓力大', '全球電商成長趨緩，物流成本居高不下', '監管風險：多國對 Amazon 市場壟斷地位展開調查'] },
-  META: { desc: 'Meta 擁有 Facebook、Instagram、WhatsApp 三大社群平台，月活躍用戶超過 30 億。廣告業務強勁復甦，AI 推薦演算法大幅提升用戶黏著度。同時大力投資 AR/VR（Quest）及開源 AI 模型（Llama）。', risks: ['廣告業務高度依賴數位廣告景氣循環', '隱私法規收緊（歐盟 GDPR）持續影響廣告定向能力', 'Reality Labs 虧損龐大，元宇宙策略商業化遙遙無期'] },
-  GOOGL: { desc: 'Alphabet 旗下 Google 掌控全球約90%搜尋市場，YouTube 是全球最大影音平台。GCP 雲端業務快速成長，Gemini AI 模型積極追趕 ChatGPT。搜尋廣告面臨 AI 搜尋助理衝擊，為核心業務最大挑戰。', risks: ['AI 搜尋助理（ChatGPT、Perplexity）威脅核心搜尋廣告', '反壟斷訴訟：美國法院裁定 Google 搜尋違反競爭法', 'YouTube 廣告成長放緩，串流競爭激烈'] },
-  GOOG: { desc: 'Alphabet（Google）旗下 Google 掌控全球約90%搜尋市場。GCP 雲端業務快速成長，Gemini AI 模型積極追趕 ChatGPT。搜尋廣告面臨 AI 搜尋助理衝擊，為核心業務最大挑戰。', risks: ['AI 搜尋（ChatGPT/Perplexity）威脅核心搜尋廣告', '反壟斷訴訟風險持續', 'YouTube 廣告成長放緩'] },
-  AMZN: { desc: 'Amazon 電商與 AWS 雲端雙引擎驅動，廣告業務快速崛起。AI 方面透過 Bedrock 平台整合多家模型，物流效率持續優化帶動零售獲利。', risks: ['AWS 面臨 Azure 競爭', '零售毛利率偏低', '監管反壟斷風險'] },
-  QQQ: { desc: 'QQQ 追蹤納斯達克100指數，持有美國最大的100家非金融科技與成長股，包含蘋果、微軟、輝達、Meta、亞馬遜等，科技股佔比超過50%。是投資美國科技產業最主流的 ETF，流動性極佳。', risks: ['高度集中科技股，利率上升時估值壓力大', '前十大持股佔比超過50%，集中度風險高', '市場修正時跌幅通常大於大盤'] },
-  SMH: { desc: 'SMH 追蹤全球最重要的半導體公司，包含輝達、台積電、博通、ASML、高通等，是押注 AI 晶片與半導體供應鏈的核心 ETF。受益於 AI 伺服器建設浪潮，近年表現遠超大盤。', risks: ['半導體週期性強，景氣反轉時跌幅劇烈', '地緣政治風險：台積電、三星等亞洲廠商佔比高', 'AI 資本支出若放緩，晶片需求將首當其衝'] },
-  ARKK: { desc: 'ARKK 是 Cathie Wood 旗下 ARK Innovation ETF，重押顛覆性創新企業，包含 Tesla、太空、基因編輯、金融科技等領域。波動極大，牛市漲幅驚人，熊市跌幅同樣驚人，適合高風險承受度投資人。', risks: ['持股集中在高本益比成長股，利率敏感度極高', '資金流出壓力大，被迫低點賣出持股形成惡性循環', '主動管理費用偏高（0.75%）'] },
-  SPY: { desc: 'SPY 是全球規模最大的 ETF，追蹤標普500指數，持有美國500大企業，是最經典的美股大盤投資工具。費用率極低（0.0945%），流動性為全球 ETF 之最，適合長期定期定額投資。', risks: ['市場系統性風險無法迴避', '科技股佔比超過30%，集中度近年持續上升', '通膨與升息環境下估值壓力'] },
-  VTI: { desc: 'VTI 追蹤全美股票市場，涵蓋大中小型股超過3900檔，是最廣泛的美股市場指數 ETF。Vanguard 旗下，費用率僅0.03%，適合追求最大分散化的長期投資人。', risks: ['涵蓋小型成長股，波動略大於 SPY', '市場系統性下跌時無法迴避', '小型股在升息環境下表現通常較弱'] },
-  SOXX: { desc: 'SOXX 是 iShares 的半導體 ETF，與 SMH 類似但持股更分散，追蹤費城半導體指數。持有英特爾、高通、博通、輝達、AMD 等半導體產業鏈完整佈局。', risks: ['半導體週期波動大', '地緣政治風險（台灣、南韓製造集中）', 'AI 需求若降溫影響較大'] },
-  AMD: { desc: 'AMD 是半導體業的黑馬，旗下 Ryzen CPU 與 Radeon GPU 持續侵蝕 Intel 與 NVIDIA 市場份額。MI300 AI 加速器積極挑戰 NVIDIA H100，是 AI 晶片市場的主要替代方案。', risks: ['AI GPU 市占率遠落後 NVIDIA，突破難度高', '筆電與桌機市場復甦力道不確定', 'Intel 反攻可能侵蝕伺服器 CPU 份額'] },
-  INTC: { desc: 'Intel 是老牌半導體巨頭，正處於重大轉型期。執行長更換後重新聚焦晶圓代工（Intel Foundry）與 AI PC 處理器。受益於美國晶片法案補貼，但製程技術追趕台積電之路仍漫長。', risks: ['製程技術落後台積電2-3個世代', '晶圓代工業務短期難以盈利', '市占率持續被 AMD 侵蝕'] },
+  AAPL: {
+    desc: 'Apple 是全球市值最大科技公司，iPhone 佔營收約52%，服務業務（App Store、Apple Music、iCloud）佔比持續提升至約25%，毛利率高達46%。',
+    fundamentals: {
+      revenue: '年營收約 $3,910億（FY2024）',
+      revenueGrowth: '年增約 +2%，成長趨緩',
+      margin: '毛利率 46.2%，營業利益率 31%',
+      eps: 'EPS 約 $6.11，年增 +10%',
+      pe: '本益比約 33x，相對科技股偏高',
+      highlight: '服務業務年增15%，毛利率高達75%，是未來最重要成長引擎',
+    },
+    outlook: '短期：Apple Intelligence AI 功能推動換機潮尚未完全兌現，中國市場銷售仍承壓。長期：服務業務持續擴張，預計2026年服務佔比突破30%，毛利率有望進一步提升。Vision Pro 混合實境平台仍在早期培育期。',
+    risks: ['iPhone 佔營收超過50%，換機週期拉長為核心隱憂', '中國市場競爭加劇，華為 Mate 系列持續搶市', 'AI 功能整合進度落後 Google/Microsoft，差距需縮短']
+  },
+  NVDA: {
+    desc: 'NVIDIA 是全球 AI 晶片絕對霸主，H100/H200/Blackwell GPU 是全球 AI 訓練與推論的核心基礎設施。資料中心業務佔營收約88%，年增超過200%。',
+    fundamentals: {
+      revenue: '年營收約 $609億（FY2024），預估FY2025突破 $1,300億',
+      revenueGrowth: '資料中心年增 +217%，成長驚人',
+      margin: '毛利率 74.6%，營業利益率 55%，盈利能力極強',
+      eps: 'EPS 約 $11.93，年增超過 +580%',
+      pe: '本益比約 38x，相對成長速度屬合理',
+      highlight: 'Blackwell 新一代 GPU 需求遠超供給，訂單能見度高達12個月以上',
+    },
+    outlook: '短期：Blackwell B100/B200 供應鏈爬坡期，毛利率可能短暫壓縮至70%以下。長期：AI 推論需求爆發（每次 ChatGPT 查詢都需要 GPU），資料中心 AI 升級週期至少持續至2027年。軟體護城河（CUDA 生態）難以被取代。',
+    risks: ['美國對中國出口管制收緊，中國市場年損失數十億美元', 'AMD MI300X、Google TPU、AWS Trainium 構成競爭', '估值高，一旦 AI 資本支出放緩股價修正空間大']
+  },
+  MSFT: {
+    desc: 'Microsoft 是全球最大企業軟體公司，Azure 雲端平台全球市占約22%排名第二。Copilot AI 助理已整合進 365 全產品線，是目前 AI 商業化落地最成熟的科技巨頭。',
+    fundamentals: {
+      revenue: '年營收約 $2,450億（FY2024）',
+      revenueGrowth: '年增 +16%，Azure 成長 +29%',
+      margin: '毛利率 70%，營業利益率 44%，盈利品質極高',
+      eps: 'EPS 約 $11.45，年增 +22%',
+      pe: '本益比約 37x，符合龍頭科技股溢價',
+      highlight: 'Azure AI 服務需求旺盛，Copilot 企業訂閱持續擴張，每月活躍用戶超過3億',
+    },
+    outlook: '短期：Azure 季增速維持在28-30%左右，AI Copilot 訂閱滲透率仍低（企業採用率約15%），提升空間巨大。長期：企業數位轉型與 AI 化浪潮的最大受益者，Office 365 護城河深厚，AI 每席位加價策略將持續拉升 ARPU。',
+    risks: ['Azure 成長若低於市場預期28%，股價將明顯承壓', 'OpenAI 高額投資（已超過130億美元）且尚未獲利', '企業 IT 預算在經濟不確定時期有削減風險']
+  },
+  TSLA: {
+    desc: 'Tesla 是全球電動車龍頭，同時布局儲能（Megapack）、FSD 自動駕駛及 Robotaxi 服務。2024年因降價策略導致毛利率從高峰30%壓縮至17%，引發市場疑慮。',
+    fundamentals: {
+      revenue: '年營收約 $976億（2024）',
+      revenueGrowth: '年增僅 +1%，成長明顯趨緩',
+      margin: '汽車毛利率 17.1%，低於比亞迪的19%，創近年新低',
+      eps: 'EPS 約 $2.04，年減 -23%',
+      pe: '本益比超過 60x，高度依賴未來成長預期',
+      highlight: 'Megapack 儲能業務年增 +113%，成為新亮點；FSD 訂閱用戶持續增加',
+    },
+    outlook: '短期：Cybertruck 量產爬坡與新款 Model Y 換代，有望刺激交付量回升。Robotaxi 計畫預計2025年在德州奧斯汀啟動，是市場最期待的催化劑。長期：若 FSD 真正實現 L4 自動駕駛，Tesla 將從車廠轉型為 AI/軟體公司，估值邏輯將完全改變。',
+    risks: ['電動車市場競爭白熱化，比亞迪、小鵬持續降價壓縮空間', '馬斯克主導 DOGE、SpaceX 等多項業務，管理精力分散', 'Robotaxi 商業化時程屢屢跳票，投資人信心受損']
+  },
+  META: {
+    desc: 'Meta 擁有 Facebook、Instagram、WhatsApp、Threads 四大平台，月活躍用戶合計超過32億。廣告收入佔營收98%，AI 推薦演算法大幅提升廣告效率，2023-2024年進入「效率年」後獲利爆發。',
+    fundamentals: {
+      revenue: '年營收約 $1,649億（2024）',
+      revenueGrowth: '年增 +22%，廣告業務持續強勁',
+      margin: '毛利率 82%，營業利益率 42%，效率年後大幅改善',
+      eps: 'EPS 約 $23.86，年增 +73%',
+      pe: '本益比約 26x，相對成長速度極具吸引力',
+      highlight: 'AI Advantage 廣告工具讓廣告主 ROI 提升30%+，帶動廣告單價持續上升',
+    },
+    outlook: '短期：2025年資本支出大增至 $640-720億，主要用於 AI 基礎設施，短期壓制自由現金流。長期：Llama 開源模型建立廣大生態，AI 眼鏡（Ray-Ban Meta）出貨量超預期，AR/VR 佈局逐漸成型。WhatsApp 商業化仍處早期，潛在空間龐大。',
+    risks: ['廣告業務高度依賴景氣循環，不景氣時廣告預算首先被削減', 'Reality Labs 累計虧損超過600億美元，拖累整體獲利', '歐盟隱私法規（GDPR）持續影響廣告精準度']
+  },
+  AMZN: {
+    desc: 'Amazon 以電商起家，目前最大獲利來源是 AWS 雲端（佔營業利益約60%）。廣告業務年增25%，已成第三大營收支柱。電商物流效率提升帶動零售部門首次實現穩定獲利。',
+    fundamentals: {
+      revenue: '年營收約 $6,040億（2024）',
+      revenueGrowth: '年增 +11%，AWS 年增 +17%',
+      margin: '整體營業利益率 10%，AWS 營業利益率高達 38%',
+      eps: 'EPS 約 $5.53，年增超過 +90%',
+      pe: '本益比約 44x，以成長率看屬合理',
+      highlight: 'AWS 年營收突破 $1,000億，AI 服務（Bedrock、SageMaker）加速成長',
+    },
+    outlook: '短期：AWS 成長提速至17-18%，AI 工作負載需求強勁。廣告業務維持高增速。長期：Project Kuiper 衛星網路、醫療（Amazon Clinic）、金融科技等新業務蓄勢待發，AWS AI 生態若能與 NVIDIA/Anthropic 深化合作，市占有望進一步提升。',
+    risks: ['AWS 面臨 Azure 與 GCP 激烈競爭，AI 市占率落後', '電商零售毛利率薄，受物流成本與促銷戰侵蝕', '全球反壟斷調查持續，監管成本上升']
+  },
+  GOOGL: {
+    desc: 'Alphabet 旗下 Google 掌控全球約91%搜尋市場，YouTube 是全球最大影音平台。GCP 雲端業務加速成長，Gemini AI 模型追趕 GPT-4。搜尋廣告佔總營收57%，是核心現金牛業務。',
+    fundamentals: {
+      revenue: '年營收約 $3,500億（2024）',
+      revenueGrowth: '年增 +14%，GCP 年增 +28%',
+      margin: '毛利率 57%，營業利益率 32%，自由現金流極強',
+      eps: 'EPS 約 $8.04，年增 +32%',
+      pe: '本益比約 22x，是大型科技股中估值最低之一',
+      highlight: 'GCP AI 服務（Gemini API、Vertex AI）需求爆發，雲端業務季增速達28%',
+    },
+    outlook: '短期：AI Overview 搜尋整合仍在調整中，廣告點擊率影響待觀察。Waymo 自動駕駛計程車服務在舊金山、鳳凰城快速擴張。長期：量子計算（Willow 晶片）、AI 藥物研發（Isomorphic Labs）等深科技投資構成長期期權，估值相對便宜是保護墊。',
+    risks: ['AI 搜尋（ChatGPT Search、Perplexity）威脅核心廣告業務', '美國司法部反壟斷訴訟，可能被迫出售 Chrome 或 Android', 'YouTube 面臨 TikTok、短影音競爭加劇']
+  },
+  GOOG: {
+    desc: 'Alphabet（GOOG 無投票權 C 股）旗下 Google 掌控全球約91%搜尋市場，GCP 雲端業務加速成長，Gemini AI 模型追趕 GPT-4。',
+    fundamentals: {
+      revenue: '年營收約 $3,500億（2024）',
+      revenueGrowth: '年增 +14%，GCP 年增 +28%',
+      margin: '毛利率 57%，營業利益率 32%',
+      eps: 'EPS 約 $8.04，年增 +32%',
+      pe: '本益比約 22x，大型科技股中估值最低',
+      highlight: 'GCP AI 服務需求爆發，量子計算（Willow）領先業界',
+    },
+    outlook: '搜尋廣告仍是核心現金牛，AI 整合持續進行。GCP 加速成長，Waymo 自動駕駛商業化。估值相對便宜，提供安全邊際。',
+    risks: ['AI 搜尋威脅核心廣告', '反壟斷訴訟風險', 'YouTube 面臨 TikTok 競爭']
+  },
+  QQQ: {
+    desc: 'QQQ 追蹤納斯達克100指數，持有美國最大100家非金融科技與成長股。前十大持股（AAPL、MSFT、NVDA、AMZN、META、GOOGL、TSLA 等）佔比超過55%，是投資美國科技產業最主流 ETF。',
+    fundamentals: {
+      revenue: '管理規模約 $2,500億，日均成交量全球 ETF 前三',
+      revenueGrowth: '5年年化報酬約 +19%，10年約 +18%',
+      margin: '費用率 0.20%，略高於 SPY 但仍屬低費',
+      eps: '加權平均 P/E 約 33x',
+      pe: '相對標普500的 P/E 溢價約20%',
+      highlight: 'AI 浪潮最大受益 ETF，NVDA 佔比約9%，科技前十大佔比55%',
+    },
+    outlook: '短期：科技股受利率走向影響大，聯準會降息路徑是關鍵催化劑。長期：AI 基礎設施建設週期至少持續2-3年，QQQ 是最直接受益工具，歷史長期報酬遠超大盤。適合長期定期定額，不建議短線追高。',
+    risks: ['高度集中科技股，利率敏感度高', '前十大持股佔比超過55%，集中度風險不可忽視', '市場修正時跌幅通常比 SPY 大20-30%']
+  },
+  SMH: {
+    desc: 'SMH 追蹤 MVIS 美國半導體指數25支成分股，前五大持股 NVDA、TSMC、AVGO、ASML、QCOM 佔比超過55%。是 AI 晶片與半導體供應鏈最純粹的投資工具，近三年報酬遠超大盤。',
+    fundamentals: {
+      revenue: '管理規模約 $220億',
+      revenueGrowth: '3年年化報酬約 +32%，受 AI 浪潮大幅拉升',
+      margin: '費用率 0.35%',
+      eps: '成分股加權平均 P/E 約 28x',
+      pe: '相對納斯達克略有溢價',
+      highlight: 'NVDA 佔比約22%，台積電約11%，直接押注 AI 晶片供應鏈核心',
+    },
+    outlook: '短期：半導體庫存去化接近尾聲，PC/手機需求溫和復甦，AI 伺服器需求持續強勁。長期：AI、自駕車、邊緣運算帶動晶片需求長期結構性成長，但週期性仍強，需留意景氣反轉風險。',
+    risks: ['半導體週期性強，景氣反轉時跌幅劇烈（2022年曾腰斬）', '地緣政治風險：台積電、三星等亞洲廠商佔比高', 'AI 資本支出若放緩，晶片需求將首當其衝']
+  },
+  AMD: {
+    desc: 'AMD 是半導體業重要競爭者，Ryzen CPU 在個人電腦市占約25%，EPYC 伺服器 CPU 持續侵蝕 Intel 份額。MI300X AI 加速器是目前市場上最具競爭力的 NVIDIA 替代方案。',
+    fundamentals: {
+      revenue: '年營收約 $257億（2024）',
+      revenueGrowth: '年增 +14%，資料中心年增 +69%',
+      margin: '毛利率 53%，低於 NVIDIA，持續改善中',
+      eps: 'EPS 約 $3.31（Non-GAAP），年增 +25%',
+      pe: '本益比約 36x（Non-GAAP）',
+      highlight: 'MI300X 年銷售額突破 $50億，微軟、Meta 皆已採購部署',
+    },
+    outlook: '短期：MI350/MI400 路線圖積極追趕 NVIDIA Blackwell，有望在2025年縮小差距。EPYC Genoa/Turin 伺服器 CPU 持續搶佔 Intel 市場。長期：AI GPU 若能進一步打入雲端大廠，估值重評機會大，但超越 NVIDIA 難度極高。',
+    risks: ['AI GPU 市占率僅約5-10%，遠落後 NVIDIA 的85%', '客製化 ASIC（Google TPU、AWS Trainium）長期侵蝕市場', 'CUDA 軟體生態護城河難以在短期內克服']
+  },
+  INTC: {
+    desc: 'Intel 是老牌半導體巨頭，正經歷艱困轉型。2024年大幅裁員15,000人，新任 CEO 聚焦回歸核心業務。晶圓代工（Intel Foundry）吸引美國政府補貼，但商業客戶仍寥寥無幾。',
+    fundamentals: {
+      revenue: '年營收約 $531億（2024）',
+      revenueGrowth: '年減 -2%，持續萎縮',
+      margin: '毛利率 42.7%，大幅低於歷史水準60%+',
+      eps: 'EPS 虧損 $4.38（GAAP），盈利能力大幅惡化',
+      pe: '本益比難以計算，依賴未來轉型成功與否',
+      highlight: '美國晶片法案補貼約 $85億，有助支撐 18A 製程研發',
+    },
+    outlook: '短期：18A 製程若能如期在2025年量產且良率達標，將是重大轉折點。Core Ultra AI PC 處理器有機會受益於微軟 Copilot+ PC 升級潮。長期：轉型成功機率不確定，但若晶圓代工業務能吸引 Qualcomm、Apple 等客戶下單，將是估值大幅重評機會。',
+    risks: ['18A 製程技術量產時程風險極高，多次跳票', '晶圓代工尚無重量級客戶，商業模式未獲驗證', 'AMD 持續侵蝕 PC 與伺服器 CPU 市占率']
+  },
+  ARKK: {
+    desc: 'ARKK 是 Cathie Wood 主導的主動管理 ETF，重押顛覆性創新：AI、基因編輯、區塊鏈、太空探索、能源儲存。從2021年高峰已下跌超過75%，是高風險高波動的投機性工具。',
+    fundamentals: {
+      revenue: '管理規模從高峰 $280億縮水至約 $60億',
+      revenueGrowth: '5年報酬約 -60%，遠遜大盤',
+      margin: '費用率 0.75%，主動管理費偏高',
+      eps: '持股平均 P/S 約 8x，估值仍偏高',
+      pe: '多數持股無獲利，P/E 無意義',
+      highlight: '持股包含 TSLA（最大持股）、Exact Sciences、Twist Bioscience 等高波動成長股',
+    },
+    outlook: '短期：聯準會降息有利高本益比成長股反彈，ARKK 在降息週期表現通常較好。長期：基因治療、太空商業化若實現突破，可能帶來超額報酬，但風險極高，不適合作為核心持倉。',
+    risks: ['持股高度依賴超低利率環境，升息環境下大幅跑輸大盤', '規模縮水導致被迫低點賣出，形成惡性循環', '主動管理績效長期跑輸被動 ETF（SPY/QQQ）']
+  },
+  SPY: {
+    desc: 'SPY 是全球規模最大 ETF（管理規模超過 $5,500億），追蹤標普500指數，是最經典的美股投資工具。持有美國500大企業，科技股佔比約32%，是長期定期定額投資的首選。',
+    fundamentals: {
+      revenue: '管理規模超過 $5,500億，日均成交量全球第一',
+      revenueGrowth: '10年年化報酬約 +13%，20年約 +10%',
+      margin: '費用率 0.0945%，極低',
+      eps: '標普500加權平均 EPS 年增約 +10%',
+      pe: '本益比約 22x（歷史平均約 16-18x，目前偏貴）',
+      highlight: '巴菲特最推薦的投資工具，長期打敗95%以上主動管理基金',
+    },
+    outlook: '短期：聯準會利率政策與企業獲利是主要驅動力，目前估值偏高（Shiller P/E 約35x）。長期：歷史證明長期持有（10年以上）勝率接近100%，是最適合一般投資人的核心持倉工具。',
+    risks: ['目前估值高於歷史平均，修正空間存在', '科技股佔比過高（前10大佔比約35%），分散化不如VTI', '短期市場大幅修正時無法避免系統性風險']
+  },
 };
 
+
+
 function generateFallbackAnalysis(stock, priceVs52, tech) {
-  const up = stock.change >= 0;
   const techScore = tech ? Math.round((tech.bullCount / Math.max(tech.bullCount+tech.bearCount,1)) * 100) : 50;
   const score = Math.min(90, Math.max(10, techScore));
   const profile = STOCK_PROFILES[stock.symbol];
 
   const overview = profile
     ? profile.desc
-    : `${stock.symbol} 是在美股上市的企業${(stock.marketCap||stock.cap) ? '，市值約 $'+fmtCap(stock.marketCap||stock.cap) : ''}。如需更詳細的公司介紹，請設定 Claude API Key 啟用 AI 分析功能。`;
+    : `${stock.symbol} 是在美股上市的企業${(stock.marketCap||stock.cap) ? '，市值約 $'+fmtCap(stock.marketCap||stock.cap) : ''}。如需更詳細的分析，請設定 Claude API Key 啟用 AI 功能。`;
+
+  const fundamentalsSection = profile?.fundamentals ? `【基本面數據】
+📊 營收：${profile.fundamentals.revenue}（${profile.fundamentals.revenueGrowth}）
+💰 獲利：${profile.fundamentals.margin}
+📈 EPS：${profile.fundamentals.eps}
+🔢 估值：${profile.fundamentals.pe}
+⭐ 亮點：${profile.fundamentals.highlight}` : '';
+
+  const outlookSection = profile?.outlook ? `【未來發展趨勢】
+${profile.outlook}` : '';
 
   const risks = profile
     ? profile.risks.map((r,i) => `${i+1}. ${r}`).join('\n')
@@ -910,32 +1086,29 @@ function generateFallbackAnalysis(stock, priceVs52, tech) {
   if (tech) {
     const rsiComment = tech.rsi >= 70 ? `RSI ${tech.rsi} 超買，短期回調風險高` : tech.rsi <= 30 ? `RSI ${tech.rsi} 超賣，可能出現反彈` : `RSI ${tech.rsi} 中性`;
     const maComment = tech.ma5 && tech.ma20 ? (tech.ma5 > tech.ma20 ? 'MA5 位於 MA20 之上，均線多頭排列' : 'MA5 跌破 MA20，均線空頭排列') : '';
-    const bollComment = tech.boll ? `布林通道 ${fmt$(tech.boll.lower)} ~ ${fmt$(tech.boll.upper)}，` + (stock.price > tech.boll.upper ? '股價突破上軌過熱' : stock.price < tech.boll.lower ? '股價跌破下軌超跌' : '股價於通道內整理') : '';
-    techText = `${maComment}。${rsiComment}。${bollComment}。整體技術面訊號${tech.bullCount}多${tech.bearCount}空，偏${tech.overall}。`;
+    const bollComment = tech.boll ? `布林通道 ${fmt$(tech.boll.lower)}~${fmt$(tech.boll.upper)}，` + (stock.price > tech.boll.upper ? '股價突破上軌過熱' : stock.price < tech.boll.lower ? '股價跌破下軌超跌' : '股價於通道內整理') : '';
+    techText = `${maComment}。${rsiComment}。${bollComment}。整體技術訊號 ${tech.bullCount} 多 / ${tech.bearCount} 空，偏${tech.overall}。`;
   } else {
-    techText = `股價位於52週區間 ${priceVs52}% 處，${priceVs52>70?'偏高需注意壓力':priceVs52<30?'偏低具潛在支撐':'中段整理'}。今日${up?'上漲':'下跌'} ${Math.abs(stock.changePct).toFixed(2)}%。`;
+    techText = `股價位於52週區間 ${priceVs52}% 處，${priceVs52>70?'偏高需注意壓力':priceVs52<30?'偏低具潛在支撐':'中段整理'}。今日${stock.change>=0?'上漲':'下跌'} ${Math.abs(stock.changePct).toFixed(2)}%。`;
   }
 
   const buyText = tech
-    ? (tech.overall==='偏多' ? `技術面偏多，${tech.rsi<70?'RSI尚未超買，可考慮逢回佈局':'RSI已超買建議等待回檔'}。${tech.ma20?`MA20（${fmt$(tech.ma20)}）可視為近期支撐參考。`:''}` : tech.overall==='偏空' ? `技術面偏空，建議觀望為主。${tech.ma20?`跌破MA20（${fmt$(tech.ma20)}）後需留意進一步下跌風險。`:''}` : '技術面中性，建議持續觀察，待趨勢明確後再決策。')
+    ? (tech.overall==='偏多' ? `技術面偏多，${tech.rsi<70?'RSI 尚未超買，可考慮逢回佈局':'RSI 已超買建議等待回檔'}。${tech.ma20?`MA20（${fmt$(tech.ma20)}）可視為近期支撐。`:''}`
+    : tech.overall==='偏空' ? `技術面偏空，建議觀望。${tech.ma20?`跌破 MA20（${fmt$(tech.ma20)}）需留意進一步下跌風險。`:''}`
+    : '技術面中性，建議持續觀察，待趨勢明確後再決策。')
     : (priceVs52>75?'目前偏高，建議觀望等待回檔。':priceVs52<30?'接近年度低點，可考慮分批低接。':'建議持續觀察，待方向明朗後再決策。');
 
-  return `【公司概況】
-${overview}
-
-【技術面分析】
-${techText}
-
-【買賣時機建議】
-${buyText} 請務必設好停損點控制風險。
-
-【主要風險因素】
-${risks}
-
-【AI 綜合評分】
-${Math.round(score/10)}/10 — ${score>65?'技術面與基本面相對健康，長期持有具吸引力':score<40?'短期技術面偏弱，謹慎操作':'技術面中性，需持續追蹤變化'}。
-
-【情緒分數：${score}】`;
+  return [
+    `【公司概況】\n${overview}`,
+    fundamentalsSection,
+    outlookSection,
+    `【技術面分析】\n${techText}`,
+    `【買賣時機建議】\n${buyText} 請務必設好停損點控制風險。`,
+    `【主要風險因素】\n${risks}`,
+    `【AI 綜合評分】\n${Math.round(score/10)}/10 — ${score>65?'基本面與技術面相對健康，長期持有具吸引力':score<40?'短期偏弱，謹慎操作':'中性，持續追蹤變化'}。`,
+    `【情緒分數：${score}】`
+  ].filter(s => s).join('\n\n');
+}
 }
 
 function renderDeepAnalysis(text, stock, techHTML = '') {
@@ -944,7 +1117,7 @@ function renderDeepAnalysis(text, stock, techHTML = '') {
   const clean = text.replace(/情緒分數[：:]\s*\d+/g,'').trim();
 
   const sections = [];
-  const sectionTitles = ['公司概況','技術面分析','買賣時機建議','主要風險因素','AI 綜合評分'];
+  const sectionTitles = ['公司概況','基本面數據','未來發展趨勢','技術面分析','買賣時機建議','主要風險因素','AI 綜合評分'];
   let remaining = clean;
 
   sectionTitles.forEach(title => {
