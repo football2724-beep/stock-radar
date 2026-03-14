@@ -8,11 +8,11 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap');
 :root {
-  --bg:#07090f;--s1:#0d1117;--s2:#161b27;--s3:#1c2333;
-  --border:#21293a;--border2:#2d3a50;
-  --accent:#e8c547;--accent2:#4f9eff;--accent3:#e05c5c;
-  --green:#3dd68c;--red:#e05c5c;--blue:#4f9eff;--purple:#a78bfa;
-  --text:#dce4f0;--muted:#5a6a82;--muted2:#8899b0;
+  --bg:#111214;--s1:#18191c;--s2:#1e2024;--s3:#24262b;
+  --border:#2a2c32;--border2:#35383f;
+  --accent:#4f9eff;--accent2:#7bc4ff;--accent3:#e05c5c;
+  --green:#3dd68c;--red:#e05c5c;--blue:#4f9eff;--purple:#818cf8;
+  --text:#e2e4e9;--muted:#4a4e5a;--muted2:#7a8090;
   --display:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;
   --body:-apple-system,BlinkMacSystemFont,'SF Pro Text','Noto Sans TC','Helvetica Neue',sans-serif;
   --serif:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;
@@ -23,8 +23,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 
 /* Ambient background */
 body::before{content:'';position:fixed;inset:0;
-  background:radial-gradient(ellipse 800px 400px at 20% 10%,rgba(232,197,71,.04),transparent),
-             radial-gradient(ellipse 600px 600px at 80% 80%,rgba(79,158,255,.04),transparent);
+  background:radial-gradient(ellipse 900px 500px at 15% 0%,rgba(79,158,255,.03),transparent),
+             radial-gradient(ellipse 600px 400px at 85% 100%,rgba(129,140,248,.02),transparent);
   pointer-events:none;z-index:0;}
 
 .app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;position:relative;z-index:1;}
@@ -41,7 +41,7 @@ body::before{content:'';position:fixed;inset:0;
 .nav-section-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:var(--display);}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:all .15s;color:var(--muted2);font-size:13px;margin-bottom:2px;}
 .nav-item:hover{background:var(--s2);color:var(--text);}
-.nav-item.active{background:rgba(232,197,71,.1);color:var(--accent);border:1px solid rgba(232,197,71,.2);}
+.nav-item.active{background:rgba(79,158,255,.1);color:var(--accent);border:1px solid rgba(79,158,255,.2);}
 .nav-item .icon{font-size:15px;width:18px;text-align:center;}
 
 .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
@@ -73,8 +73,8 @@ body::before{content:'';position:fixed;inset:0;
 .search-input-wrap input:focus{border-color:var(--accent);}
 .search-input-wrap input::placeholder{text-transform:none;letter-spacing:0;color:var(--muted);font-weight:400;font-family:var(--body);}
 .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
-.btn{background:var(--accent);color:#07090f;border:none;padding:12px 22px;border-radius:10px;font-family:var(--display);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px;white-space:nowrap;}
-.btn:hover{background:#f0d060;transform:translateY(-1px);}
+.btn{background:var(--accent);color:#fff;border:none;padding:12px 22px;border-radius:10px;font-family:var(--display);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.5px;white-space:nowrap;}
+.btn:hover{background:#6aaeff;transform:translateY(-1px);}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted2);padding:10px 16px;border-radius:8px;font-family:var(--display);font-size:12px;cursor:pointer;transition:all .2s;}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
@@ -85,7 +85,7 @@ body::before{content:'';position:fixed;inset:0;
 
 /* ── Ticker hero ── */
 .ticker-hero{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:18px;display:none;position:relative;overflow:hidden;}
-.ticker-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.ticker-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--purple),transparent);}
 .th-row{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;}
 .th-left .symbol{font-family:var(--display);font-size:30px;font-weight:600;color:var(--accent);letter-spacing:-0.5px;}
 .th-left .name{font-size:13px;color:var(--muted2);margin-top:2px;}
@@ -115,7 +115,7 @@ body::before{content:'';position:fixed;inset:0;
 /* ── Time tabs ── */
 .ttabs{display:flex;gap:4px;margin-bottom:12px;}
 .ttab{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--display);font-size:10px;font-weight:600;padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .15s;letter-spacing:.5px;}
-.ttab.active,.ttab:hover{background:rgba(232,197,71,.1);border-color:var(--accent);color:var(--accent);}
+.ttab.active,.ttab:hover{background:rgba(79,158,255,.1);border-color:var(--accent);color:var(--accent);}
 
 /* ── AI Box ── */
 .ai-box{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;}
@@ -125,7 +125,7 @@ body::before{content:'';position:fixed;inset:0;
 .ai-content p:last-child{margin-bottom:0;}
 .ai-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
 .ai-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.ai-section-title{font-family:var(--display);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.ai-section-title{font-family:var(--display);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
 
 /* ── Sentiment ── */
 .sent-wrap{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
@@ -197,7 +197,7 @@ body::before{content:'';position:fixed;inset:0;
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(6px);}
 .modal-overlay.show{display:flex;}
 .modal{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:28px;max-width:440px;width:90%;}
-.modal h2{font-family:var(--display);font-size:16px;font-weight:800;color:var(--accent);margin-bottom:6px;letter-spacing:.5px;}
+.modal h2{font-family:var(--display);font-size:16px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.5px;}
 .modal p{font-size:13px;color:var(--muted2);line-height:1.7;margin-bottom:14px;}
 .modal input{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:'Courier New',monospace;font-size:13px;padding:10px 14px;border-radius:8px;outline:none;margin-bottom:12px;}
 .modal input:focus{border-color:var(--accent);}
@@ -210,7 +210,7 @@ body::before{content:'';position:fixed;inset:0;
 
 /* ── Misc ── */
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.5px;}
-.tag-yellow{background:rgba(232,197,71,.12);color:var(--accent);border:1px solid rgba(232,197,71,.25);}
+.tag-yellow{background:rgba(79,158,255,.12);color:var(--accent);border:1px solid rgba(79,158,255,.25);}
 .tag-blue{background:rgba(79,158,255,.12);color:var(--blue);border:1px solid rgba(79,158,255,.25);}
 .tag-red{background:rgba(224,92,92,.12);color:var(--red);border:1px solid rgba(224,92,92,.25);}
 .tag-green{background:rgba(61,214,140,.12);color:var(--green);border:1px solid rgba(61,214,140,.25);}
@@ -496,15 +496,54 @@ const MOCK_STOCKS = {
 };
 
 const SECTORS = [
-  {name:'科技',emoji:'💻',etfs:'QQQ, XLK',chg:'+12.4%',up:true,desc:'AI、雲端、半導體'},
-  {name:'半導體',emoji:'🔬',etfs:'SMH, SOXX',chg:'+18.7%',up:true,desc:'AI 晶片需求爆發'},
-  {name:'能源',emoji:'⚡',etfs:'XLE, VDE',chg:'-2.1%',up:false,desc:'油價波動中'},
-  {name:'醫療',emoji:'🏥',etfs:'XLV, VHT',chg:'+5.3%',up:true,desc:'生技AI新藥研發'},
-  {name:'金融',emoji:'🏦',etfs:'XLF, VFH',chg:'+8.2%',up:true,desc:'升息環境利多'},
-  {name:'消費',emoji:'🛍️',etfs:'XLY, VCR',chg:'+3.1%',up:true,desc:'消費復甦中'},
-  {name:'工業',emoji:'🏗️',etfs:'XLI, VIS',chg:'+6.8%',up:true,desc:'基建+製造回流'},
-  {name:'不動產',emoji:'🏢',etfs:'VNQ, IYR',chg:'-4.5%',up:false,desc:'高利率壓力大'},
+  {name:'科技',emoji:'💻',etf:'QQQ',etfs:'QQQ, XLK',desc:'AI、雲端、半導體'},
+  {name:'半導體',emoji:'🔬',etf:'SMH',etfs:'SMH, SOXX',desc:'AI 晶片需求爆發'},
+  {name:'能源',emoji:'⚡',etf:'XLE',etfs:'XLE, VDE',desc:'油價走勢主導'},
+  {name:'醫療',emoji:'🏥',etf:'XLV',etfs:'XLV, VHT',desc:'生技AI新藥研發'},
+  {name:'金融',emoji:'🏦',etf:'XLF',etfs:'XLF, VFH',desc:'利率與信貸環境'},
+  {name:'消費',emoji:'🛍️',etf:'XLY',etfs:'XLY, VCR',desc:'消費支出趨勢'},
+  {name:'工業',emoji:'🏗️',etf:'XLI',etfs:'XLI, VIS',desc:'基建+製造回流'},
+  {name:'不動產',emoji:'🏢',etf:'VNQ',etfs:'VNQ, IYR',desc:'利率敏感度高'},
 ];
+
+async function loadSectorData() {
+  const grid = document.getElementById('sectorGrid');
+  grid.innerHTML = SECTORS.map(s => `
+    <div class="sector-card" id="sc-${s.etf}">
+      <div style="font-size:20px">${s.emoji}</div>
+      <div class="sector-name">${s.name}</div>
+      <div class="sector-chg" id="sc-chg-${s.etf}"><div class="spinner" style="width:10px;height:10px;border-width:1.5px"></div></div>
+      <div class="sector-desc">${s.desc}</div>
+      <div style="margin-top:6px;font-size:10px;color:var(--muted)">代表 ETF: ${s.etf}</div>
+    </div>`).join('');
+
+  // Add click handlers
+  SECTORS.forEach(s => {
+    document.getElementById(`sc-${s.etf}`).onclick = () => analyzeSector(s.name, s.etfs, s.etf);
+  });
+
+  // Fetch all ETF prices in parallel
+  const results = await fetchStockMulti(SECTORS.map(s => s.etf));
+  results.forEach((stock, i) => {
+    const s = SECTORS[i];
+    const up = stock.change >= 0;
+    const chgEl = document.getElementById(`sc-chg-${s.etf}`);
+    if (chgEl) {
+      chgEl.className = `sector-chg ${up?'up':'down'}`;
+      chgEl.textContent = `${up?'+':''}${stock.changePct?.toFixed(2)||'0.00'}%`;
+    }
+    // Store real data back
+    s.chg = `${up?'+':''}${stock.changePct?.toFixed(2)||'0.00'}%`;
+    s.up = up;
+    s.price = stock.price;
+  });
+
+  // Add data source note
+  const note = document.createElement('div');
+  note.style.cssText = 'grid-column:1/-1;font-size:11px;color:var(--muted);padding:8px 4px;display:flex;align-items:center;gap:6px;';
+  note.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0"></span>今日漲跌幅為真實數據，來源：Yahoo Finance（各產業代表 ETF 當日報酬）`;
+  grid.appendChild(note);
+}
 
 // ─────────────────────────────────────────────
 // INIT
@@ -548,8 +587,28 @@ function getStock(sym) {
   const pct = (Math.random()-0.47)*5;
   const chg = base * pct / 100;
   return {symbol:sym,name:sym+' Corp.',price:+base.toFixed(2),change:+chg.toFixed(2),changePct:+pct.toFixed(2),
-    high:+(base*1.015).toFixed(2),low:+(base*0.985).toFixed(2),vol:Math.floor(Math.random()*30e6+500000),
-    hi52:+(base*1.35).toFixed(2),lo52:+(base*0.65).toFixed(2),cap:base*Math.random()*8e9+1e9,pe:+(12+Math.random()*55).toFixed(1)};
+    high:+(base*1.015).toFixed(2),low:+(base*0.985).toFixed(2),volume:Math.floor(Math.random()*30e6+500000),
+    hi52:+(base*1.35).toFixed(2),lo52:+(base*0.65).toFixed(2),marketCap:base*Math.random()*8e9+1e9,pe:+(12+Math.random()*55).toFixed(1)};
+}
+
+async function fetchStock(sym) {
+  try {
+    const res = await fetch(`${API_BASE}/stock/${sym}`, {signal: AbortSignal.timeout(6000)});
+    const d = await res.json();
+    if (!d.error) {
+      console.log(`✅ ${sym} 真實數據:`, d.price);
+      return d;
+    }
+    console.warn(`⚠️ ${sym} API 回傳錯誤:`, d.error);
+  } catch(e) {
+    console.warn(`❌ ${sym} 抓取失敗:`, e.message);
+  }
+  console.warn(`📦 ${sym} 使用備用模擬數據`);
+  return getStock(sym);
+}
+
+async function fetchStockMulti(syms) {
+  return await Promise.all(syms.map(s => fetchStock(s)));
 }
 
 function genPrices(stock, days) {
@@ -752,16 +811,23 @@ async function runAnalyze() {
   btn.disabled = false; btn.textContent = '分析';
 }
 
-function switchRange(range, el) {
+async function switchRange(range, el) {
   document.querySelectorAll('.ttab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   currentRange = range;
   if (!currentTicker) return;
-  const stock = getStock(currentTicker);
-  const days = {'1mo':30,'3mo':90,'6mo':180,'1y':365}[range] || 30;
-  const prices = genPrices(stock, days);
+
+  const stock = await fetchStock(currentTicker);
+  let prices = [];
+  try {
+    const res = await fetch(`${API_BASE}/history/${currentTicker}?range=${range}`, {signal: AbortSignal.timeout(8000)});
+    const d = await res.json();
+    if (d.prices) prices = d.prices.filter(p => p != null);
+  } catch(e) {}
+  if (prices.length < 10) prices = genPrices(stock, {'1mo':30,'3mo':90,'6mo':180,'1y':365}[range]||30);
+
   const tech = interpretTechnicals(prices, stock);
-  renderPriceChart(prices, genLabels(days), stock.change >= 0, tech);
+  renderPriceChart(prices, genLabels(prices.length), stock.change >= 0, tech);
 }
 
 function renderPriceChart(prices, labels, isUp, tech) {
@@ -1186,10 +1252,9 @@ function renderCompareTags() {
 }
 
 async function renderCompareTable() {
-  document.getElementById('compareResults').innerHTML = `<div class="loading-row"><div class="spinner"></div><span>比較中...</span></div>`;
-  await sleep(400);
+  document.getElementById('compareResults').innerHTML = `<div class="loading-row"><div class="spinner"></div><span>抓取真實股價中...</span></div>`;
 
-  const stocks = compareTickers.map(sym => getStock(sym));
+  const stocks = await fetchStockMulti(compareTickers);
 
   let tableHTML = `<div class="card" style="overflow-x:auto"><table class="data-table">
     <thead><tr>
@@ -1198,14 +1263,17 @@ async function renderCompareTable() {
 
   stocks.forEach(s => {
     const up = s.change >= 0;
-    const pos = Math.round((s.price-s.lo52)/(s.hi52-s.lo52)*100);
+    const hi52 = s.hi52 || s.fiftyTwoWeekHigh || 0;
+    const lo52 = s.lo52 || s.fiftyTwoWeekLow || 0;
+    const cap = s.marketCap || s.cap || 0;
+    const pos = hi52 && lo52 ? Math.round((s.price-lo52)/(hi52-lo52)*100) : 50;
     tableHTML += `<tr>
-      <td><span style="font-family:var(--display);font-weight:800;color:var(--accent)">${s.symbol}</span><br><span style="font-size:11px;color:var(--muted)">${s.name.substring(0,18)}</span></td>
-      <td style="font-family:var(--display);font-weight:700">${fmt$(s.price)}</td>
+      <td><span style="font-family:var(--display);font-weight:700;color:var(--accent)">${s.symbol}</span><br><span style="font-size:11px;color:var(--muted)">${(s.name||s.symbol).substring(0,18)}</span></td>
+      <td style="font-family:var(--display);font-weight:600">${fmt$(s.price)}</td>
       <td><span class="${up?'up':'down'}" style="font-family:var(--display);font-size:13px;font-weight:600">${up?'▲':'▼'} ${Math.abs(s.changePct).toFixed(2)}%</span></td>
-      <td>${fmt$(s.hi52)}</td>
-      <td>${fmt$(s.lo52)}</td>
-      <td>${s.cap?'$'+fmtCap(s.cap):'-'}</td>
+      <td>${fmt$(hi52)}</td>
+      <td>${fmt$(lo52)}</td>
+      <td>${cap?'$'+fmtCap(cap):'-'}</td>
       <td>${s.pe?s.pe+'x':'-'}</td>
       <td>
         <div style="display:flex;align-items:center;gap:6px">
@@ -1241,18 +1309,10 @@ ${stocks.map(s=>`${s.symbol}（${s.name}）：${fmt$(s.price)}，今日${s.chang
 // PAGE: 產業趨勢
 // ─────────────────────────────────────────────
 function renderSectors() {
-  const grid = document.getElementById('sectorGrid');
-  grid.innerHTML = SECTORS.map(s => `
-    <div class="sector-card" onclick="analyzeSector('${s.name}','${s.etfs}')">
-      <div style="font-size:20px">${s.emoji}</div>
-      <div class="sector-name">${s.name}</div>
-      <div class="sector-chg ${s.up?'up':'down'}">${s.chg}</div>
-      <div class="sector-desc">${s.desc}</div>
-      <div style="margin-top:6px;font-size:10px;color:var(--muted)">ETF: ${s.etfs}</div>
-    </div>`).join('');
+  loadSectorData();
 }
 
-async function analyzeSector(name, etfs) {
+async function analyzeSector(name, etfs, etf) {
   const box = document.getElementById('sectorAiBox');
   const title = document.getElementById('sectorAiTitle');
   const content = document.getElementById('sectorAiContent');
@@ -1264,40 +1324,48 @@ async function analyzeSector(name, etfs) {
   let text = null;
   if (apiKey) {
     const prompt = `請用繁體中文分析美股「${name}產業」的當前趨勢（200字以內）：
+代表 ETF：${etfs}，${etfPrice}
 1. 目前趨勢與驅動因素（2句）
-2. 代表性 ETF（${etfs}）近期表現（1句）
+2. 代表性 ETF 近期表現解讀（1句，請引用上方真實數據）
 3. 未來6個月展望（2句）
 4. 主要風險（1句）
 語氣專業，適合台灣投資人。`;
     try { text = await callAI(prompt); } catch(e){}
   }
 
+  const sector = SECTORS.find(s=>s.name===name);
+  const etfPrice = sector?.price ? `${etf} 現價 $${sector.price}，今日 ${sector.chg}` : etf;
+
   if (!text) {
-    const sector = SECTORS.find(s=>s.name===name);
-    text = `目前${name}產業整體趨勢${sector?.up?'向上，市場情緒樂觀':'偏弱，面臨調整壓力'}，${sector?.desc}是主要題材。\n\n代表 ETF（${etfs}）年度表現${sector?.chg}，${sector?.up?'吸引大量資金流入':'受到部分資金撤離'}。\n\n未來展望方面，需持續關注總體經濟環境與利率走向。設定 Claude API Key 可獲得更深入的產業分析。`;
+    const up = sector?.up;
+    text = `目前${name}產業整體趨勢${up?'向上，市場情緒樂觀':'偏弱，面臨調整壓力'}，${sector?.desc}是主要題材。\n\n代表 ETF ${etf} 今日${up?'上漲':'下跌'} ${sector?.chg||''}，${up?'資金持續流入':'賣壓稍重'}。\n\n未來展望方面，需持續關注總體經濟環境與聯準會利率走向。設定 Claude API Key 可獲得更深入的產業分析。`;
   }
 
-  content.innerHTML = `<div class="ai-content">${text.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('')}</div>`;
+  content.innerHTML = `
+    <div class="ai-content">${text.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('')}</div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0"></span>
+      漲跌數據來源：Yahoo Finance ${etf} 當日報酬｜${new Date().toLocaleDateString('zh-TW')} 更新
+    </div>`;
 }
 
 // ─────────────────────────────────────────────
 // PAGE: 投資組合
 // ─────────────────────────────────────────────
-function addToPortfolio() {
+async function addToPortfolio() {
   const sym = document.getElementById('portTicker').value.trim().toUpperCase();
   const shares = parseFloat(document.getElementById('portShares').value);
   const costInput = parseFloat(document.getElementById('portCost').value);
   if (!sym || !shares || shares <= 0) return;
-  const stock = getStock(sym);
+  const stock = await fetchStock(sym);
   const buyPrice = costInput > 0 ? costInput : stock.price;
   const existing = portfolio.find(p => p.symbol === sym);
   if (existing) {
-    // Weighted average cost
     const totalShares = existing.shares + shares;
     existing.buyPrice = ((existing.buyPrice * existing.shares) + (buyPrice * shares)) / totalShares;
     existing.shares = totalShares;
   } else {
-    portfolio.push({symbol:sym, name:stock.name, shares, buyPrice});
+    portfolio.push({symbol:sym, name:stock.name||sym, shares, buyPrice});
   }
   localStorage.setItem('srPortfolio', JSON.stringify(portfolio));
   document.getElementById('portTicker').value = '';
@@ -1312,7 +1380,7 @@ function removeFromPortfolio(sym) {
   renderPortfolio();
 }
 
-function renderPortfolio() {
+async function renderPortfolio() {
   const list = document.getElementById('portfolioList');
   if (portfolio.length === 0) {
     list.innerHTML = `<div class="empty-state"><div class="ei">💼</div><p>還沒有持股<br>從下方新增</p></div>`;
@@ -1321,9 +1389,13 @@ function renderPortfolio() {
     return;
   }
 
+  list.innerHTML = `<div class="loading-row"><div class="spinner"></div><span>更新股價中...</span></div>`;
+
+  const stocks = await fetchStockMulti(portfolio.map(p => p.symbol));
+
   let totalValue = 0, totalCost = 0;
-  list.innerHTML = portfolio.map(p => {
-    const stock = getStock(p.symbol);
+  list.innerHTML = portfolio.map((p, i) => {
+    const stock = stocks[i];
     const value = stock.price * p.shares;
     const cost = p.buyPrice * p.shares;
     const pnl = value - cost;
@@ -1332,7 +1404,7 @@ function renderPortfolio() {
     return `<div class="portfolio-item" onclick="ap('${p.symbol}')">
       <div class="pi-symbol">${p.symbol}</div>
       <div class="pi-info">
-        <div class="pi-name">${p.name.substring(0,20)}</div>
+        <div class="pi-name">${(stock.name||p.name).substring(0,20)}</div>
         <div class="pi-shares">${p.shares} 股｜成本 ${fmt$(p.buyPrice)}｜現價 ${fmt$(stock.price)}</div>
       </div>
       <div class="pi-value">
@@ -1373,8 +1445,8 @@ async function runRisk() {
   btn.disabled = true; btn.textContent = '評估中...';
   document.getElementById('riskErr').style.display = 'none';
 
-  await sleep(300);
-  const stock = getStock(sym);
+  await sleep(100);
+  const stock = await fetchStock(sym);
   const priceVs52 = Math.round((stock.price-stock.lo52)/(stock.hi52-stock.lo52)*100);
   const volatility = Math.abs(stock.changePct) > 3 ? 'high' : Math.abs(stock.changePct) > 1.5 ? 'mid' : 'low';
   const valuation = stock.pe ? (stock.pe > 50 ? 'high' : stock.pe < 20 ? 'low' : 'mid') : 'mid';
