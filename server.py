@@ -49,8 +49,17 @@ class StockHandler(BaseHTTPRequestHandler):
             self.fetch_history(ticker.upper(), range_val)
 
         # 首頁說明
-        elif self.path == "/" or self.path == "":
-            self.send_json({"status": "ok", "message": "AI 股票觀察站後端運行中 🚀"})
+        elif self.path == "/" or self.path == "" or self.path == "/index.html":
+            try:
+                with open("index.html", "rb") as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", len(content))
+                self.end_headers()
+                self.wfile.write(content)
+            except FileNotFoundError:
+                self.send_json({"status": "ok", "message": "AI 股票觀察站後端運行中 🚀"})
 
         else:
             self.send_json({"error": "找不到此路由"}, 404)
